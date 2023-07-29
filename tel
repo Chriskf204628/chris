@@ -1,0 +1,110 @@
+<?php
+  
+
+header('Content-Type: text/html; charset=UTF-8');
+session_start();
+
+?>
+<table width="327" border="0" align="center">
+    <tr>
+      <td width="89">區&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;號：</td>
+      <td width="228"><label for="areacode"></label>
+        <select name="areacode" id="areacode">
+          <option value="" selected="selected" <?php echo !isset($_SESSION["last_area_code"]) ? 'selected' : ''; ?>>請選擇</option>
+          <option value="852" <?php if ($areacode === '852') { echo ' selected'; } ?>>香港+852</option>
+          <option value="853" <?php if ($areacode === '853') { echo ' selected'; } ?>>澳門+853</option>
+          <option value="86"  <?php if ($areacode === '86') { echo ' selected'; } ?>>中國+86</option>
+        </select>
+        <span class="red">*</span></td>
+    </tr>
+  </table>
+ <table width="327" border="0" align="center">
+  <tr>
+    <td width="89">地&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;區：</td>
+     <td width="228">
+      <select id="region">
+        <option value="">請先選擇地區</option>
+      </select><span class="red">*</span>
+       
+    </td>
+  </tr>
+  <tr>
+    <td>城&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;巿：</td>
+    <td>
+      <select id="city">
+        <option value="">請先選擇城巿</option>
+      </select><span class="red">*</span>
+    </td>
+  </tr>
+</table>
+
+<script>
+var regions = {
+  852: ['中西區','灣仔區','東區','南區','油尖旺區','深水埗區','九龍城區','黃大仙區','觀塘區','西貢區','葵青區','荃灣區','沙田區','大埔區','元朗區','北區','屯門區','離島區'],
+  853: ['澳門'],
+  86: ['廣東省', '北京市']
+};
+var cities = {
+ '中西區': ['堅尼地城','西環','西營盤','上環','中環','金鐘','半山'],
+'灣仔區':['灣仔','銅鑼灣','跑馬地','大坑','掃桿埔','渣甸山'],
+'東區': ['天后','炮台山','北角','鰂魚涌','太古','西灣河','筲箕灣','杏花村','小西灣','柴灣'],
+'南區':['薄扶林','華富','香港仔','黃竹坑','鴨脷洲','赤柱','大潭','石澳'],
+'油尖旺區':['大角咀','柯士甸','尖沙咀','佐敦','油麻地','旺角','太子'],
+'深水埗區':['深水埗','石硤尾','長沙灣','荔枝角','美孚','南昌'],
+'九龍城區':['紅磡','土瓜灣','馬頭圍','啟德','九龍城','何文田','九龍塘','黃埔'],
+'黃大仙區':['彩虹','牛池灣','鑽石山','黃大仙','樂富','新蒲崗','慈雲山'],
+'觀塘區':['觀塘','牛頭角','九龍灣','秀茂坪','順利','藍田','油塘'],
+'西貢區':['西貢','將軍澳','調景嶺','坑口','寶琳','康城','清水灣'],
+'葵青區':['葵芳','葵興','葵涌','荔景','青衣'],
+'荃灣區':['荃灣','大窩口','深井'],
+'沙田區':['大圍','沙田','火炭','馬鞍山','九肚山','石門','小瀝源'],
+'大埔區':['大埔'],
+'元朗區':['元朗','八鄉','洪水橋','錦田','屏山','廈村','新田','天水圍'],
+'北區':['粉嶺','上水','北區','沙頭角'],
+'屯門區':['屯門','掃管笏','藍地','小欖','新墟'],
+'離島區':['大嶼山','東涌','馬灣','愉景灣','長洲','南丫島','坪洲'],
+  '澳門': ['澳門半島','氹仔','路氹城','路環'],
+  '廣東省': ['深圳', '廣州'],
+  '北京市': ['海淀區', '朝陽區']
+};
+
+// 綁定國家下拉式菜單的change事件
+var countrySelect = document.getElementById('areacode');
+countrySelect.addEventListener('change', function() {
+  var regionSelect = document.getElementById('region');
+  var citySelect = document.getElementById('city');
+  var selectedCountry = countrySelect.value;
+  
+  // 更新地區下拉式菜單的選項
+  regionSelect.innerHTML = '<option value="">請選擇</option>';
+  if (selectedCountry) {
+    for (var i = 0; i < regions[selectedCountry].length; i++) {
+      var option = document.createElement('option');
+      option.value = regions[selectedCountry][i];
+      option.text = regions[selectedCountry][i];
+      regionSelect.appendChild(option);
+    }
+  }
+  
+  // 清空城市下拉式菜單的選項
+  citySelect.innerHTML = '<option value="">請先選擇地區</option>';
+});
+
+// 綁定地區下拉式菜單的change事件
+var regionSelect = document.getElementById('region');
+regionSelect.addEventListener('change', function() {
+  var citySelect = document.getElementById('city');
+  var selectedRegion = regionSelect.value;
+  
+  // 更新城市下拉式菜單的選項
+  citySelect.innerHTML = '<option value="">請選擇</option>';
+  if (selectedRegion) {
+    for (var i = 0; i < cities[selectedRegion].length; i++) {
+      var option = document.createElement('option');
+      option.value = cities[selectedRegion][i];
+      option.text = cities[selectedRegion][i];
+      citySelect.appendChild(option);
+    }
+  }
+});
+</script>
